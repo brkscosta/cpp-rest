@@ -1,0 +1,11 @@
+
+POST http://localhost:1984/resource
+Content-Type: application/json
+
+{
+  "teste": "yau"
+}
+
+###
+
+GET http://localhost:1984/test
