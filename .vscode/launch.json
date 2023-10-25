@@ -4,13 +4,13 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [{
-    "name": "(gdb) Launch",
+    "name": "(gdb) UploadAI",
     "type": "cppdbg",
     "request": "launch",
-    "program": "${workspaceFolder}/src/build/UploadAi",
+    "program": "${workspaceFolder}/build/UploadAi",
     "args": [],
     "stopAtEntry": false,
-    "cwd": "${fileDirname}",
+    "cwd": "${workspaceFolder}",
     "environment": [],
     "externalConsole": false,
     "MIMode": "gdb",
@@ -25,6 +25,6 @@
             "text": "-gdb-set disassembly-flavor intel",
             "ignoreFailures": true
         }
-    ]
+    ], "preLaunchTask": "Build"
   }]
 }

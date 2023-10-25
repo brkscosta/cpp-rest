@@ -95,13 +95,10 @@ Standard: Cpp11
 TabWidth: 4
 UseTab: Never
 
-# Regras de indentação para pré-processador
 IndentPPDirectives: None
 
-# Regras de indentação para namespace
 NamespaceIndentation: None
 
-# Regras para colocação de chaves
 BraceWrapping:
   AfterClass: false
   AfterControlStatement: true
@@ -114,19 +111,14 @@ BraceWrapping:
   BeforeCatch: false
   BeforeElse: true
 
-# Regras para a lista de argumentos
 BinPackArguments: true
 
-# Regras para a lista de parâmetros de função
 BinPackParameters: true
 
-# Regras para a lista de inicializadores do construtor
 BreakConstructorInitializersBeforeComma: false
 
-# Coluna limite
-ColumnLimit: 80
+ColumnLimit: 110
 
-# Regras para as quebras de linha
 AllowShortBlocksOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false

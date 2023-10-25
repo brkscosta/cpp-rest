@@ -6,7 +6,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(lib/restbed)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES
+  src/main.cpp
+)
 
 add_executable(UploadAi ${SOURCE_FILES})
 

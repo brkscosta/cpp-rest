@@ -1,10 +1,10 @@
 #!/bin/bash
 
 if [ ! -d "build" ]; then
-    mkdir src/build
+    mkdir build
 fi
 
-cd src/build
+cd build
 
 cmake -DBUILD_SSL=NO -DBUILD_TESTS=NO ..
 
