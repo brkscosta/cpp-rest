@@ -5,6 +5,8 @@
 #pragma once
 
 //System Includes
+#include <corvusoft/restbed/rule.hpp>
+#include <functional>
 #include <vector>
 #include <memory>
 #include <cstddef>

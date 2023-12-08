@@ -5,6 +5,7 @@
 #pragma once
 
 //System Includes
+#include <corvusoft/restbed/context_value.hpp>
 #include <map>
 #include <string>
 #include <memory>

@@ -17,10 +17,12 @@ void post_method_handler(const shared_ptr<Session> session)
 
     int content_length = request->get_header("Content-Length", 0);
 
-    session->fetch(content_length, [](const shared_ptr<Session>& session, const Bytes& body) {
-        fprintf(stdout, "%.*s\n", (int)body.size(), body.data());
-        session->close(BAD_REQUEST, "Hello, World!", {{"Content-Length", "13"}});
-    });
+    session->fetch(content_length,
+        [](const shared_ptr<Session>& session, const Bytes& body)
+        {
+            fprintf(stdout, "%.*s\n", (int)body.size(), body.data());
+            session->close(BAD_REQUEST, "Hello, World!", {{"Content-Length", "13"}});
+        });
 }
 
 void get_method_handler(const shared_ptr<Session> session)
@@ -37,7 +39,7 @@ void get_method_handler(const shared_ptr<Session> session)
 int main(const int, const char**)
 {
     const uint16_t port = 8080;
-    auto resource    = make_shared<Resource>();
+    auto resource = make_shared<Resource>();
     auto resourceGet = make_shared<Resource>();
 
     resource->set_path("/resource");

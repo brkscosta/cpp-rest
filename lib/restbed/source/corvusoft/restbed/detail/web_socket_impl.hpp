@@ -5,9 +5,11 @@
 #pragma once
 
 //System Includes
+#include <corvusoft/restbed/web_socket_message.hpp>
 #include <memory>
 #include <string>
 #include <functional>
+#include <system_error>
 
 //Project Includes
 #include "corvusoft/restbed/byte.hpp"
