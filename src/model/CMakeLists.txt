@@ -4,8 +4,8 @@ set(SOURCE_FILES
   ${SOURCE_DIR}/Prompt.cpp
 )
 
-target_sources(UploadAi PRIVATE ${SOURCE_FILES})
+target_sources(CppRest PRIVATE ${SOURCE_FILES})
 
-target_include_directories(UploadAi PRIVATE
+target_include_directories(CppRest PRIVATE
   ${SOURCE_DIR}
 )

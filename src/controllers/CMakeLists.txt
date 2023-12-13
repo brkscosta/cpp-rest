@@ -5,6 +5,6 @@ set(SOURCE_FILES
   ${SOURCE_DIR}/PromptController.cpp
 )
 
-target_sources(UploadAi PRIVATE ${SOURCE_FILES})
+target_sources(CppRest PRIVATE ${SOURCE_FILES})
 
-target_include_directories(UploadAi PRIVATE ${SOURCE_DIR})
+target_include_directories(CppRest PRIVATE ${SOURCE_DIR})

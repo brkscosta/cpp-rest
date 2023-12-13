@@ -4,4 +4,4 @@ set(SOURCE_FILES
   ${SOURCE_DIR}/MemoRepo.cpp
 )
 
-target_sources(UploadAi PRIVATE ${SOURCE_FILES})
+target_sources(CppRest PRIVATE ${SOURCE_FILES})

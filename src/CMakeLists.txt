@@ -5,10 +5,12 @@ set(SOURCE_FILES
   ${SOURCE_DIR}/main.cpp
 )
 
-add_executable(UploadAi ${SOURCE_FILES})
+add_executable(CppRest ${SOURCE_FILES})
 
-target_link_directories(UploadAi PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/restbed)
-target_link_libraries(UploadAi PRIVATE restbed-shared)
+target_compile_options(CppRest PRIVATE -g)
+
+target_link_directories(CppRest PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/restbed)
+target_link_libraries(CppRest PRIVATE restbed-shared)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
