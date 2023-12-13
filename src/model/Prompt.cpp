@@ -20,17 +20,17 @@ std::string Prompt::getTemplate()
     return m_template;
 }
 
-void Prompt::setId(std::string& id)
+void Prompt::setId(const std::string& id)
 {
     m_id = id;
 }
 
-void Prompt::setTemplate(std::string& value)
+void Prompt::setTemplate(const std::string& value)
 {
     m_template = value;
 }
 
-void Prompt::setTitle(std::string& title)
+void Prompt::setTitle(const std::string& title)
 {
     m_title = title;
 }

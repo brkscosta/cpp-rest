@@ -1,5 +1,8 @@
+#include "Prompt.h"
+#include "PromptMemoDataAccess.h"
+#include "controllers/PromptController.h"  // Adicione o include do PromptController
+#include "repositories/MemoRepo.h"
 #include <algorithm>
-#include <corvusoft/restbed/logger.hpp>
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
@@ -8,57 +11,38 @@
 #include <ratio>
 #include <restbed>
 
-using namespace std;
 using namespace restbed;
+using namespace rest;
 
-void post_method_handler(const shared_ptr<Session> session)
-{
-    const auto request = session->get_request();
-
-    int content_length = request->get_header("Content-Length", 0);
-
-    session->fetch(content_length,
-        [](const shared_ptr<Session>& session, const Bytes& body)
-        {
-            fprintf(stdout, "%.*s\n", (int)body.size(), body.data());
-            session->close(BAD_REQUEST, "Hello, World!", {{"Content-Length", "13"}});
-        });
-}
-
-void get_method_handler(const shared_ptr<Session> session)
-{
-    const auto request = session->get_request();
-    const auto headers = session->get_headers();
-
-    for (auto it = headers.begin(), itEnd = headers.end(); it != itEnd;)
-    {
-        std::cout << "it->first: " << it->first << "it->second: " << it->second << std::endl;
-    }
-}
+static const uint16_t SERVER_PORT = 8080;
 
 int main(const int, const char**)
 {
-    const uint16_t port = 8080;
-    auto resource = make_shared<Resource>();
-    auto resourceGet = make_shared<Resource>();
+    auto service = std::make_shared<Service>();
+    auto promptMemoDao = std::make_shared<service::PromptMemoDataAccess>(std::make_shared<repository::MemoRepo<std::shared_ptr<model::Prompt>, std::string>>());
+    auto promptService = std::make_shared<service::PromptService>(promptMemoDao);
+    auto promptController = std::make_shared<controller::PromptController>(service, promptService);
 
-    resource->set_path("/resource");
-    resource->set_method_handler("POST", post_method_handler);
+    auto promptResource = std::make_shared<Resource>();
+    promptResource->set_path("/prompts");
+    promptResource->set_method_handler("POST", [promptController](const std::shared_ptr<Session>& session)
+    {
+        promptController->handlePost(session);
+    });
+    promptResource->set_method_handler("GET", [promptController](const std::shared_ptr<Session>& session)
+    {
+        promptController->handleGet(session);
+    });
 
-    resourceGet->set_path("/test");
-    resourceGet->set_method_handler("GET", get_method_handler);
-
-    auto settings = make_shared<Settings>();
-    settings->set_port(port);
+    auto settings = std::make_shared<Settings>();
+    settings->set_port(SERVER_PORT);
     settings->set_default_header("Connection", "close");
 
-    Service service;
-    service.publish(resource);
-    service.publish(resourceGet);
+    service->publish(promptResource);
 
-    std::cout << "Server stated on port: " << port << std::endl;
+    std::cout << "Server started on port: " << SERVER_PORT << std::endl;
 
-    service.start(settings);
+    service->start(settings);
 
     return EXIT_SUCCESS;
 }

@@ -13,14 +13,14 @@ namespace rest::service
 class PromptService
 {
   public:
-    PromptService(std::shared_ptr<model::IPromptDAO>& promptDao);
+    PromptService(const std::shared_ptr<model::IPromptDAO>& promptDao);
     ~PromptService() = default;
 
     void addNewPrompt(std::shared_ptr<model::Prompt>& prompt);
     std::shared_ptr<model::Prompt> getPrompt(std::string& id);
 
   private:
-    std::shared_ptr<rest::model::IPromptDAO> m_promptDao;
+    std::shared_ptr<model::IPromptDAO> m_promptDao;
 };
 
 }  // namespace rest::service

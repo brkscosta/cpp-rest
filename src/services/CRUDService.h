@@ -1,9 +1,12 @@
+// CRUDService.h
+#pragma once
+#include <iostream>
 #include <memory>
 #include <restbed>
+#include <vector>
 
 namespace rest::service
 {
-
 template <typename T>
 class CRUDService
 {
@@ -14,8 +17,6 @@ class CRUDService
   public:
     void get(const std::shared_ptr<restbed::Session>& session, const std::string& path);
     void post(const std::shared_ptr<restbed::Session>& session);
-    void put(const std::shared_ptr<restbed::Session>& session, const std::string& path);
-    void _delete(const std::shared_ptr<restbed::Session>& session, const std::string& path);
     std::string to_json(const T& item);
     T from_json(const std::string& json);
 
@@ -23,4 +24,5 @@ class CRUDService
     std::shared_ptr<restbed::Service> m_listener;
     std::vector<T> m_data;
 };
+
 }  // namespace rest::service

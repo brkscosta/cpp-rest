@@ -9,11 +9,11 @@ class Prompt
     Prompt();
     ~Prompt() = default;
 
-    void setId(std::string& id);
+    void setId(const std::string& id);
     std::string getId();
-    void setTitle(std::string& title);
+    void setTitle(const std::string& title);
     std::string getTitle();
-    void setTemplate(std::string& value);
+    void setTemplate(const std::string& value);
     std::string getTemplate();
 
   private:

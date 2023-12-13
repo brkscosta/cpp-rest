@@ -1,13 +1,7 @@
 #include "CRUDService.h"
-#include <corvusoft/restbed/settings.hpp>
-#include <corvusoft/restbed/status_code.hpp>
-#include <memory>
+#include "Prompt.h"
 
 using namespace rest::service;
-
-#include <iostream>
-#include <restbed>
-#include <vector>
 
 template <typename T>
 CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
@@ -32,14 +26,6 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
         else if (method == "POST" && path == "/data")
         {
             post(session);
-        }
-        else if (method == "PUT" && path.substr(0, 7) == "/data/")
-        {
-            put(session, path);
-        }
-        else if (method == "DELETE" && path.substr(0, 7) == "/data/")
-        {
-            _delete(session, path);
         }
         else
         {
@@ -68,14 +54,15 @@ void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const
 template <typename T>
 void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session)
 {
-    session->fetch([this](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)
+    auto contentLength = session->get_request()->get_header("Content-Length", 0);
+    session->fetch(contentLength, [this](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)
     {
         try
         {
             const std::string body_str(body.begin(), body.end());
             const T item = from_json(body_str);
 
-            m_data.push_back(item);
+            // m_data.push_back(item);
             session->close(restbed::CREATED);
         }
         catch (const std::exception& e)
@@ -86,53 +73,8 @@ void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session)
 }
 
 template <typename T>
-void CRUDService<T>::put(const std::shared_ptr<restbed::Session>& session, const std::string& path)
-{
-    const size_t index = std::stoi(path.substr(6));
-    if (index >= 0 && index < m_data.size())
-    {
-        session->fetch(
-            [this, index](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)
-            {
-                try
-                {
-                    const std::string body_str(body.begin(), body.end());
-                    const T item = from_json(body_str);
-
-                    m_data[index] = item;
-                    session->close(restbed::OK);
-                }
-                catch (const std::exception& e)
-                {
-                    session->close(restbed::BAD_REQUEST, e.what());
-                }
-            });
-    }
-    else
-    {
-        session->close(restbed::NOT_FOUND);
-    }
-}
-
-template <typename T>
-void CRUDService<T>::_delete(const std::shared_ptr<restbed::Session>& session, const std::string& path)
-{
-    const size_t index = std::stoi(path.substr(6));
-    if (index >= 0 && index < m_data.size())
-    {
-        m_data.erase(m_data.begin() + index);
-        session->close(restbed::NO_CONTENT);
-    }
-    else
-    {
-        session->close(restbed::NOT_FOUND);
-    }
-}
-
-template <typename T>
 std::string CRUDService<T>::to_json(const T& item)
 {
-    // Implemente aqui a conversão da estrutura de dados para JSON
     return "";
 }
 
@@ -140,6 +82,7 @@ template <typename T>
 T CRUDService<T>::from_json(const std::string& json)
 {
     T item;
-    // Implemente aqui a conversão do JSON para a estrutura de dados
     return item;
 }
+
+template class rest::service::CRUDService<rest::model::Prompt>;
