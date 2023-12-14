@@ -13,7 +13,8 @@
 using namespace rest;
 using namespace service;
 
-PromptMemoDataAccess::PromptMemoDataAccess(const MemoPromptRepo& memoPromptRepo) : m_memoRepo(memoPromptRepo)
+PromptMemoDataAccess::PromptMemoDataAccess(const MemoPromptRepo& memoPromptRepo)
+    : m_memoRepo(memoPromptRepo)
 {}
 
 std::vector<std::shared_ptr<model::Prompt>> PromptMemoDataAccess::listAllPrompts()

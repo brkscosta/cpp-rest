@@ -1,7 +1,7 @@
+#include "MemoRepo.h"
 #include "Prompt.h"
+#include "PromptController.h"
 #include "PromptMemoDataAccess.h"
-#include "controllers/PromptController.h"  // Adicione o include do PromptController
-#include "repositories/MemoRepo.h"
 #include <algorithm>
 #include <cstdint>
 #include <cstdlib>
@@ -10,6 +10,7 @@
 #include <memory>
 #include <ratio>
 #include <restbed>
+#include "config.h"
 
 using namespace restbed;
 using namespace rest;
@@ -29,6 +30,7 @@ int main(const int, const char**)
     {
         promptController->handlePost(session);
     });
+
     promptResource->set_method_handler("GET", [promptController](const std::shared_ptr<Session>& session)
     {
         promptController->handleGet(session);
@@ -40,7 +42,7 @@ int main(const int, const char**)
 
     service->publish(promptResource);
 
-    std::cout << "Server started on port: " << SERVER_PORT << std::endl;
+    std::cout << "Server started on port: " << SERVER_PORT << "\n Version: " << VERSION << "\n Commit: " << GIT_COMMIT_HASH << std::endl;
 
     service->start(settings);
 
