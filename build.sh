@@ -6,7 +6,14 @@ fi
 
 cd build
 
-cmake -DBUILD_SSL=NO -DBUILD_TESTS=NO ..
+# Carrega as variáveis do arquivo .env
+if [ -f "../.env" ]; then
+    source ../.env
+fi
+
+: ${VERSION:="1.0.0"}
+
+cmake -DVERSION=${VERSION} -DCMAKE_BUILD_TYPE=Debug -DBUILD_SSL=${BUILD_SSL:-NO} -DBUILD_TESTS=${BUILD_TESTS:-NO} ..
 
 make
 

@@ -7,4 +7,6 @@ set(SOURCE_FILES
 
 target_sources(CppRest PRIVATE ${SOURCE_FILES})
 
-target_include_directories(CppRest PRIVATE ${SOURCE_DIR})
+target_include_directories(CppRest PRIVATE
+  ${SOURCE_DIR}
+)

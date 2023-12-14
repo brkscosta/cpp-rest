@@ -9,6 +9,7 @@ set(SOURCE_FILES
 
 target_sources(CppRest PRIVATE ${SOURCE_FILES})
 
-target_include_directories(CppRest PRIVATE ${SOURCE_DIR})
-
-target_include_directories(CppRest PRIVATE ${SOURCE_DIR}/prompt)
+target_include_directories(CppRest PRIVATE
+  ${SOURCE_DIR}
+  ${SOURCE_DIR}/prompt
+)
