@@ -26,12 +26,12 @@ int main(const int, const char**)
 
     auto promptResource = std::make_shared<Resource>();
     promptResource->set_path("/prompts");
-    promptResource->set_method_handler("POST", [promptController](const std::shared_ptr<Session>& session)
+    promptResource->set_method_handler("POST", [&promptController](const std::shared_ptr<Session>& session)
     {
         promptController->handlePost(session);
     });
 
-    promptResource->set_method_handler("GET", [promptController](const std::shared_ptr<Session>& session)
+    promptResource->set_method_handler("GET", [&promptController](const std::shared_ptr<Session>& session)
     {
         promptController->handleGet(session);
     });
