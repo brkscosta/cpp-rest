@@ -1,5 +1,5 @@
 
-POST http://localhost:1984/resource
+POST http://localhost:8080/resource
 Content-Type: application/json
 
 {
@@ -8,4 +8,4 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:1984/test
+GET http://localhost:8080/test

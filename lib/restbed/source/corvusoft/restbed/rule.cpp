@@ -2,47 +2,47 @@
  * Copyright 2013-2020, Corvusoft Ltd, All Rights Reserved.
  */
 
-//System Includes
+// System Includes
 
-//Project Includes
+// Project Includes
 #include "corvusoft/restbed/rule.hpp"
 #include "corvusoft/restbed/detail/rule_impl.hpp"
 
-//External Includes
+// External Includes
 
-//System Namespaces
-using std::unique_ptr;
+// System Namespaces
 using std::shared_ptr;
+using std::unique_ptr;
 
-//Project Namespaces
+// Project Namespaces
 using restbed::detail::RuleImpl;
 
-//External Namespaces
+// External Namespaces
 
 namespace restbed
 {
-    bool Rule::condition( const shared_ptr< Session > )
-    {
-        return true;
-    }
-    
-    int Rule::get_priority( void ) const
-    {
-        return m_pimpl->m_priority;
-    }
-    
-    void Rule::set_priority( const int value )
-    {
-        m_pimpl->m_priority = value;
-    }
-    
-    Rule::Rule( void ) : m_pimpl( new RuleImpl )
-    {
-        return;
-    }
-    
-    Rule::~Rule( void )
-    {
-        return;
-    }
+bool Rule::condition(const shared_ptr<Session>)
+{
+    return true;
 }
+
+int Rule::get_priority(void) const
+{
+    return m_pimpl->m_priority;
+}
+
+void Rule::set_priority(const int value)
+{
+    m_pimpl->m_priority = value;
+}
+
+Rule::Rule(void) : m_pimpl(new RuleImpl)
+{
+    return;
+}
+
+Rule::~Rule(void)
+{
+    return;
+}
+}  // namespace restbed

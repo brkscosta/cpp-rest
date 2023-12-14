@@ -6,6 +6,8 @@
 
 //System Includes
 #include <atomic>
+#include <corvusoft/restbed/logger.hpp>
+#include <corvusoft/restbed/request.hpp>
 #include <set>
 #include <map>
 #include <chrono>

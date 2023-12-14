@@ -4,10 +4,11 @@
 Language: Cpp
 
 # Estilo de formatação geral
+BasedOnStyle: LLVM
 AccessModifierOffset: -2
-AlignAfterOpenBracket: AlwaysBreak
-AlignConsecutiveAssignments: true
-AlignConsecutiveDeclarations: true
+AlignAfterOpenBracket: false
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
 AlignEscapedNewlinesLeft: true
 AlignOperands: true
 AlignTrailingComments: true
@@ -22,28 +23,7 @@ AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: true
 BinPackArguments: true
 BinPackParameters: true
-BraceWrapping:
-  AfterClass: false
-  AfterControlStatement: true
-  AfterEnum: false
-  AfterFunction: true
-  AfterNamespace: false
-  AfterObjCDeclaration: false
-  AfterStruct: false
-  AfterUnion: false
-  BeforeCatch: false
-  BeforeElse: false
-  IndentBraces: false
-  SplitEmptyFunction: true
-  SplitEmptyRecord: true
-  SplitEmptyNamespace: true
-BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Custom
-BreakBeforeTernaryOperators: true
-BreakConstructorInitializersBeforeComma: false
-ColumnLimit: 80
-CommentPragmas: '^ IWYU pragma:'
-CompactNamespaces: false
+ColumnLimit: 120
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
@@ -57,8 +37,6 @@ IndentCaseLabels: false
 IndentPPDirectives: None
 IndentWidth: 4
 IndentWrappedFunctionNames: false
-JavaScriptQuotes: Leave
-JavaScriptWrapImports: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 MacroBlockBegin: ''
 MacroBlockEnd: ''
@@ -95,63 +73,4 @@ Standard: Cpp11
 TabWidth: 4
 UseTab: Never
 
-IndentPPDirectives: None
-
-NamespaceIndentation: None
-
-BraceWrapping:
-  AfterClass: false
-  AfterControlStatement: true
-  AfterEnum: false
-  AfterFunction: true
-  AfterNamespace: false
-  AfterObjCDeclaration: false
-  AfterStruct: false
-  AfterUnion: false
-  BeforeCatch: false
-  BeforeElse: true
-
-BinPackArguments: true
-
-BinPackParameters: true
-
-BreakConstructorInitializersBeforeComma: false
-
-ColumnLimit: 110
-
-AllowShortBlocksOnASingleLine: false
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLoopsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
-AllowShortCaseLabelsOnASingleLine: false
-BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Custom
-BreakBeforeTernaryOperators: true
-BreakAfterJavaFieldAnnotations: false
-BreakStringLiterals: true
-FixNamespaceComments: true
-BreakBeforeInheritanceComma: false
-
-# Regras para as quebras de linha dentro de blocos
-BraceWrapping:
-  AfterClass: false
-  AfterControlStatement: true
-  AfterEnum: false
-  AfterFunction: true
-  AfterNamespace: false
-  AfterObjCDeclaration: false
-  AfterStruct: false
-  AfterUnion: false
-  BeforeCatch: false
-  BeforeElse: true
-  IndentBraces: false
-  SplitEmptyFunction: true
-  SplitEmptyRecord: true
-  SplitEmptyNamespace: true
-
-# Outras regras
-DerivePointerAlignment: false
-IndentCaseLabels: false
-IndentWidth: 4
-PointerAlignment: Left
-SpacesBeforeTrailingComments: 2
+BreakBeforeBraces: Allman
