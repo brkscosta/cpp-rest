@@ -1,9 +1,8 @@
 
-POST http://localhost:8080/prompts
+POST http://localhost:8080/prompt
 Content-Type: application/json
 
 {
-  "id": "9123-12904123-12",
   "title": "My Title",
   "template": "My nive template"
 }  
