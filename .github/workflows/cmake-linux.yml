@@ -31,6 +31,7 @@ jobs:
         run: | 
           conan profile update settings.compiler.libcxx=libstdc++11 default
           conan profile update settings.compiler.version=9.5 default
+          conan profile update settings.build_type="${BUILD_TYPE}" default
 
       - name: Install conan packages
         run: |
@@ -38,8 +39,8 @@ jobs:
           cd build
           conan install .. --build=missing
 
-      - name: Configure CMake
-        run: cmake -DSERVER_PORT=8080 -DHAS_GTEST="${HAS_GTEST}" -DVERSION="${VERSION:-1.0.0}" -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" ..
-
-      - name: Run build
-        run: cmake --build .
+      - name: Configure CMake and Build
+        run: |
+          cd build
+          cmake -DSERVER_PORT=8080 -DHAS_GTEST="${HAS_GTEST}" -DVERSION="${VERSION:-1.0.0}" -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" ..
+          cmake --build .

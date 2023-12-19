@@ -36,6 +36,11 @@ if ! conan profile show default | grep "compiler.version=9.5"; then
   conan profile update settings.compiler.version=9.5 default
 fi
 
+if ! conan profile show default | grep "build_type=Debug"; then
+  echo "Updating default profile to use build_type as Debug"
+  conan profile update settings.build_type=Debug default
+fi
+
 if [ -f "../.env" ]; then
   source ../.env
 fi
