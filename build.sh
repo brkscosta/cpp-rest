@@ -19,6 +19,11 @@ if [ ! -d "$BUILD_DIR" ]; then
   mkdir "$BUILD_DIR"
 fi
 
+if ! conan profile show default &> /dev/null; then
+  echo "Creating default profile..."
+  conan profile new --detect default
+fi
+
 cd "$BUILD_DIR"
 
 if ! conan profile show default | grep "compiler.libcxx=libstdc++11"; then
