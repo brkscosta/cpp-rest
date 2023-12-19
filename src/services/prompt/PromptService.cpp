@@ -10,7 +10,7 @@ PromptService::PromptService(const std::shared_ptr<model::IPromptDAO>& promptDao
     : m_promptDao(promptDao)
 {}
 
-std::shared_ptr<model::Prompt> PromptService::getPrompt(std::string& id)
+std::shared_ptr<model::Prompt> PromptService::getPrompt(const std::string& id)
 {
     auto prompt = m_promptDao->findPromptById(id);
 
@@ -22,7 +22,7 @@ std::shared_ptr<model::Prompt> PromptService::getPrompt(std::string& id)
     return prompt.value();
 }
 
-void PromptService::addNewPrompt(std::shared_ptr<model::Prompt>& prompt)
+void PromptService::addNewPrompt(const std::shared_ptr<model::Prompt>& prompt)
 {
     m_promptDao->addPrompt(prompt);
 }

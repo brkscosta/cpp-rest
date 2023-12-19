@@ -16,8 +16,8 @@ class PromptService
     PromptService(const std::shared_ptr<model::IPromptDAO>& promptDao);
     ~PromptService() = default;
 
-    void addNewPrompt(std::shared_ptr<model::Prompt>& prompt);
-    std::shared_ptr<model::Prompt> getPrompt(std::string& id);
+    void addNewPrompt(const std::shared_ptr<model::Prompt>& prompt);
+    std::shared_ptr<model::Prompt> getPrompt(const std::string& id);
 
   private:
     std::shared_ptr<model::IPromptDAO> m_promptDao;

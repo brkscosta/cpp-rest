@@ -1,11 +1,13 @@
 
-POST http://localhost:8080/resource
+POST http://localhost:8080/prompts
 Content-Type: application/json
 
 {
-  "teste": "yau"
-}
+  "id": "9123-12904123-12",
+  "title": "My Title",
+  "template": "My nive template"
+}  
 
 ###
 
-GET http://localhost:8080/test
+GET http://localhost:8080/prompts

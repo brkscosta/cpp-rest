@@ -1,9 +1,9 @@
-// CRUDService.h
 #pragma once
 #include <iostream>
 #include <memory>
 #include <restbed>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 namespace rest::service
 {
@@ -15,14 +15,13 @@ class CRUDService
     ~CRUDService() = default;
 
   public:
+    T fromJSON(const std::string& json);
+    std::string toJSON(const nlohmann::json& item);
     void get(const std::shared_ptr<restbed::Session>& session, const std::string& path);
-    void post(const std::shared_ptr<restbed::Session>& session);
-    std::string to_json(const T& item);
-    T from_json(const std::string& json);
+    void post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item);
 
   private:
     std::shared_ptr<restbed::Service> m_listener;
-    std::vector<T> m_data;
 };
 
 }  // namespace rest::service

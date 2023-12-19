@@ -1,7 +1,16 @@
 #include "CRUDService.h"
 #include "Prompt.h"
+#include <memory>
+#include <string>
+#include <vector>
 
 using namespace rest::service;
+using namespace nlohmann;
+
+namespace
+{
+const std::string HEADER_CONTENT_LENGTH = "Content-Length";
+};
 
 template <typename T>
 CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
@@ -9,7 +18,7 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
 {
     m_listener->set_error_handler([](const int, const std::exception& error, const std::shared_ptr<restbed::Session>& session)
     {
-        std::cout << "Erro ao processar a requisição: " << error.what() << std::endl;
+        std::cout << "Error on precessing request: " << error.what() << std::endl;
         session->close(restbed::BAD_REQUEST);
     });
 
@@ -18,6 +27,7 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
         const auto request = session->get_request();
         const std::string method = request->get_method();
         const std::string path = request->get_path();
+        std::shared_ptr<T> item;
 
         if (method == "GET" && path.substr(0, 6) == "/data/")
         {
@@ -25,7 +35,7 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
         }
         else if (method == "POST" && path == "/data")
         {
-            post(session);
+            post(session, item);
         }
         else
         {
@@ -35,34 +45,46 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
 }
 
 template <typename T>
-void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const std::string& path)
+T CRUDService<T>::fromJSON(const std::string& json)
 {
-    const size_t index = std::stoi(path.substr(6));
-    if (index >= 0 && index < m_data.size())
-    {
-        const T& item = m_data[index];
-        const std::string response_body = to_json(item);
-
-        session->close(restbed::OK, response_body, {{"Content-Length", std::to_string(response_body.length())}});
-    }
-    else
-    {
-        session->close(restbed::NOT_FOUND);
-    }
+    return json::parse(json);
 }
 
 template <typename T>
-void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session)
+std::string CRUDService<T>::toJSON(const json& item)
 {
-    auto contentLength = session->get_request()->get_header("Content-Length", 0);
-    session->fetch(contentLength, [this](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)
+    try
+    {
+        return item.dump(2);
+    }
+    catch (const json::type_error& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    return {};
+}
+
+template <typename T>
+void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const std::string& path)
+{
+    const std::string response_body = "Nice response";
+    session->close(restbed::OK, response_body, {{HEADER_CONTENT_LENGTH, std::to_string(response_body.length())}});
+}
+
+template <typename T>
+void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item)
+{
+    auto contentLength = session->get_request()->get_header(HEADER_CONTENT_LENGTH, 0);
+
+    session->fetch(contentLength, [this, &item](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)
     {
         try
         {
-            const std::string body_str(body.begin(), body.end());
-            const T item = from_json(body_str);
+            const std::string bodyRequest(body.begin(), body.end());
+            const T data = fromJSON(bodyRequest);
 
-            // m_data.push_back(item);
+            item = std::make_shared<T>(data);
             session->close(restbed::CREATED);
         }
         catch (const std::exception& e)
@@ -70,19 +92,6 @@ void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session)
             session->close(restbed::BAD_REQUEST, e.what());
         }
     });
-}
-
-template <typename T>
-std::string CRUDService<T>::to_json(const T& item)
-{
-    return "";
-}
-
-template <typename T>
-T CRUDService<T>::from_json(const std::string& json)
-{
-    T item;
-    return item;
 }
 
 template class rest::service::CRUDService<rest::model::Prompt>;
