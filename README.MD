@@ -7,7 +7,11 @@
 For clangd check the steps:
 
 ```bash
-sudo apt install -y clangd-15 clang-format-15
+sudo apt install -y clangd-15 clang-format-15 g++-9
+```
+
+```bash
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
 ```
 
 ```bash
