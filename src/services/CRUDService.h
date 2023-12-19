@@ -16,8 +16,7 @@ class CRUDService
 
   public:
     T fromJSON(const std::string& json);
-    std::string toJSON(const nlohmann::json& item);
-    void get(const std::shared_ptr<restbed::Session>& session, const std::string& path);
+    void get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData);
     void post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item);
 
   private:

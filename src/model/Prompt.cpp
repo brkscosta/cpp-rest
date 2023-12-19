@@ -22,3 +22,12 @@ std::string Prompt::getTemplate()
 {
     return m_template;
 }
+
+nlohmann::json Prompt::toJson()
+{
+    return {
+        {"id", m_id},
+        {"title", m_title},
+        {"template", m_template}
+    };
+}

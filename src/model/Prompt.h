@@ -17,6 +17,7 @@ class Prompt
     std::string getId();
     std::string getTitle();
     std::string getTemplate();
+    nlohmann::json toJson();
 
   private:
     std::string m_id;

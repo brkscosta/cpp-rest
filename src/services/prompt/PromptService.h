@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <nlohmann/json.hpp>
 
 namespace rest::model
 {
@@ -18,8 +19,10 @@ class PromptService
 
     void addNewPrompt(const std::shared_ptr<model::Prompt>& prompt);
     std::shared_ptr<model::Prompt> getPrompt(const std::string& id);
+    std::string getAllPrompts();
 
   private:
+    std::string toJSON(const nlohmann::json& prompt) const;
     std::shared_ptr<model::IPromptDAO> m_promptDao;
 };
 

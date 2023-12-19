@@ -1,5 +1,8 @@
 #include "CRUDService.h"
 #include "Prompt.h"
+#include "corvusoft/restbed/status_code.hpp"
+#include "nlohmann/json_fwd.hpp"
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
@@ -10,6 +13,15 @@ using namespace nlohmann;
 namespace
 {
 const std::string HEADER_CONTENT_LENGTH = "Content-Length";
+
+std::multimap<std::string, std::string> buildJsonResponseHeader(const std::uint16_t& messageContentLength)
+{
+    return {
+        {"Content-Length", std::to_string(messageContentLength)},
+        {"Content-Type", "application/json"}
+    };
+};
+
 };
 
 template <typename T>
@@ -22,25 +34,13 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
         session->close(restbed::BAD_REQUEST);
     });
 
-    m_listener->set_not_found_handler([this](const std::shared_ptr<restbed::Session>& session)
+    m_listener->set_not_found_handler([](const std::shared_ptr<restbed::Session>& session)
     {
         const auto request = session->get_request();
         const std::string method = request->get_method();
         const std::string path = request->get_path();
-        std::shared_ptr<T> item;
 
-        if (method == "GET" && path.substr(0, 6) == "/data/")
-        {
-            get(session, path);
-        }
-        else if (method == "POST" && path == "/data")
-        {
-            post(session, item);
-        }
-        else
-        {
-            session->close(restbed::BAD_REQUEST);
-        }
+        session->close(restbed::BAD_REQUEST);
     });
 }
 
@@ -51,25 +51,20 @@ T CRUDService<T>::fromJSON(const std::string& json)
 }
 
 template <typename T>
-std::string CRUDService<T>::toJSON(const json& item)
+void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData)
 {
-    try
+    if (jsonData.empty())
     {
-        return item.dump(2);
-    }
-    catch (const json::type_error& e)
-    {
-        std::cout << e.what() << std::endl;
+        nlohmann::json responseMessage = {
+            {"message", "Resource not found"}
+        };
+
+        std::string strResponseMessage = responseMessage.dump(2);
+        session->close(restbed::NOT_FOUND, strResponseMessage, buildJsonResponseHeader(strResponseMessage.length()));
+        return;
     }
 
-    return {};
-}
-
-template <typename T>
-void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const std::string& path)
-{
-    const std::string response_body = "Nice response";
-    session->close(restbed::OK, response_body, {{HEADER_CONTENT_LENGTH, std::to_string(response_body.length())}});
+    session->close(restbed::OK, jsonData, {{ HEADER_CONTENT_LENGTH, std::to_string(jsonData.length())}});
 }
 
 template <typename T>

@@ -3,6 +3,7 @@
 #include "Prompt.h"
 #include "PromptMemoDataAccess.h"
 #include "PromptService.h"
+#include <algorithm>
 #include <memory>
 #include <restbed>
 
@@ -29,5 +30,7 @@ void PromptController::handlePost(const std::shared_ptr<restbed::Session>& sessi
 
 void PromptController::handleGet(const std::shared_ptr<restbed::Session>& session)
 {
-    // m_promptCRUDService->get(session, session->get_request()->get_path());
+    auto jsonStringPrompts = m_promptService->getAllPrompts();
+
+    m_crudService->get(session, jsonStringPrompts);
 }
