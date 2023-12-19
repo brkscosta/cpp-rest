@@ -24,9 +24,6 @@ jobs:
       - name: Install conan
         run: pip install conan==1.59
 
-      - name: Create build folder
-        run: mkdir build
-
       - name: Create conan profile
         run: conan profile new --detect default
 
@@ -37,6 +34,7 @@ jobs:
 
       - name: Install conan packages
         run: |
+          mkdir build
           cd build
           conan install .. --build=missing
 
