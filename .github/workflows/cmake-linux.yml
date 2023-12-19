@@ -19,9 +19,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Make the script files executable
-        run: chmod +x build.sh
+      run: chmod +x build.sh
 
     - name: Run build
-        run: |
+      run: |
           ./build.sh
       shell: bash
