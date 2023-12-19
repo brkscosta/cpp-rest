@@ -39,7 +39,7 @@ jobs:
           conan install .. --build=missing
 
       - name: Configure CMake
-        run: cmake -DSERVER_PORT=8080 -DHAS_GTEST="${HAS_GTEST}"" -DVERSION="${VERSION:-1.0.0}" -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" ..
+        run: cmake -DSERVER_PORT=8080 -DHAS_GTEST="${HAS_GTEST}" -DVERSION="${VERSION:-1.0.0}" -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" ..
 
       - name: Run build
         run: cmake --build .
