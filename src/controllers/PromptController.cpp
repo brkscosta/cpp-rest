@@ -10,11 +10,11 @@
 using namespace rest::controller;
 
 PromptController::PromptController(
-    const std::shared_ptr<restbed::Service>& service,
-    const std::shared_ptr<service::PromptService>& promptService
+    const std::shared_ptr<service::PromptService>& promptService,
+    const std::shared_ptr<service::CRUDService<model::Prompt>>& promptCrudService
     )
     : m_promptService(promptService)
-    , m_crudService(std::make_unique<service::CRUDService<model::Prompt>>(service))
+    , m_crudService(promptCrudService)
 {}
 
 void PromptController::handlePost(const std::shared_ptr<restbed::Session>& session)

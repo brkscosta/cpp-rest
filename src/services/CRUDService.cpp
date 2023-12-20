@@ -17,8 +17,8 @@ const std::string HEADER_CONTENT_LENGTH = "Content-Length";
 std::multimap<std::string, std::string> buildJsonResponseHeader(const std::uint16_t& messageContentLength)
 {
     return {
-        {"Content-Length", std::to_string(messageContentLength)},
-        {"Content-Type", "application/json"}
+        { HEADER_CONTENT_LENGTH, std::to_string(messageContentLength) },
+        {"Content-Type", "application/json" }
     };
 };
 
@@ -64,7 +64,7 @@ void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const
         return;
     }
 
-    session->close(restbed::OK, jsonData, {{ HEADER_CONTENT_LENGTH, std::to_string(jsonData.length())}});
+    session->close(restbed::OK, jsonData, buildJsonResponseHeader(jsonData.length()));
 }
 
 template <typename T>

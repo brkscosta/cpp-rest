@@ -27,11 +27,8 @@ namespace rest::controller
 class PromptController
 {
   public:
-    PromptController(
-        const std::shared_ptr<restbed::Service>& service,
-        const std::shared_ptr<rest::service::PromptService>& promptService
-      );
-
+    PromptController(const std::shared_ptr<service::PromptService>& promptService,
+        const std::shared_ptr<service::CRUDService<model::Prompt>>& promptCrudService);
     ~PromptController() = default;
 
     void handleGet(const std::shared_ptr<restbed::Session>& session);
@@ -39,8 +36,8 @@ class PromptController
     void handlePost(const std::shared_ptr<restbed::Session>& session);
 
   private:
-    std::shared_ptr<rest::service::PromptService> m_promptService;
-    std::unique_ptr<rest::service::CRUDService<rest::model::Prompt>> m_crudService;
+    std::shared_ptr<service::PromptService> m_promptService;
+    std::shared_ptr<service::CRUDService<rest::model::Prompt>> m_crudService;
 };
 
 }  // namespace rest::controller

@@ -17,7 +17,8 @@ int main(const int, const char**)
     const auto settings = std::make_shared<restbed::Settings>();
     const auto promptMemoDao = std::make_shared<service::PromptMemoDataAccess>(std::make_shared<repository::MemoRepo<std::shared_ptr<model::Prompt>, std::string>>());
     const auto promptService = std::make_shared<service::PromptService>(promptMemoDao);
-    const auto promptController = std::make_shared<controller::PromptController>(service, promptService);
+    const auto crudPromptService = std::make_shared<service::CRUDService<model::Prompt>>(service);
+    const auto promptController = std::make_shared<controller::PromptController>(promptService, crudPromptService);
 
     auto promptResource = std::make_shared<restbed::Resource>();
     promptResource->set_path("/prompts");

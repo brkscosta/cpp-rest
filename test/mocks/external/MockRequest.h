@@ -7,12 +7,6 @@ namespace restbed
 class MockRequest : public Request
 {
   public:
-    MockRequest() : restbed::Request()
-    {}
-
-    MockRequest(const restbed::Uri& value) : restbed::Request(value)
-    {}
-
     MOCK_CONST_METHOD1(has_header, bool(const std::string&));
     MOCK_CONST_METHOD1(has_path_parameter, bool(const std::string&));
     MOCK_CONST_METHOD1(has_query_parameter, bool(const std::string&));

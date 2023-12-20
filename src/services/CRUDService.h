@@ -14,7 +14,6 @@ class CRUDService
     CRUDService(const std::shared_ptr<restbed::Service>& listener);
     ~CRUDService() = default;
 
-  public:
     T fromJSON(const std::string& json);
     void get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData);
     void post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item);
