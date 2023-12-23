@@ -7,7 +7,7 @@ set(SOURCE_FILES
 
 target_sources(CppRest PRIVATE ${SOURCE_FILES})
 
-target_include_directories(CppRest PRIVATE
+include_directories(CppRest PRIVATE
   ${SOURCE_CONTROLLERS_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/../services
   ${CMAKE_CURRENT_SOURCE_DIR}/../services/prompt

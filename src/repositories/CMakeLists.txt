@@ -6,7 +6,7 @@ set(SOURCE_FILES
 
 target_sources(CppRest PRIVATE ${SOURCE_FILES})
 
-target_include_directories(CppRest PRIVATE
+include_directories(CppRest PRIVATE
   ${SOURCE_REPOSITORIES_DIR}
   ${CMAKE_SOURCE_DIR}/include
 )

@@ -7,7 +7,7 @@ set(SOURCE_FILES
   ${SOURCE_SERVICES_DIR}/CRUDService.cpp
 )
 
-target_include_directories(CppRest PRIVATE
+include_directories(CppRest PRIVATE
   ${SOURCE_SERVICES_DIR}/prompt
 )
 

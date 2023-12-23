@@ -23,7 +23,7 @@ include_directories(${CMAKE_BINARY_DIR})
 add_subdirectory(src)
 if(HAS_GTEST)
   enable_testing()
-  add_subdirectory(test)
+  add_subdirectory(tests)
 endif()
 
 configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h)

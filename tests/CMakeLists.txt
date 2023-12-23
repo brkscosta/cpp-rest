@@ -17,10 +17,9 @@ SET(GTEST_SRCS
   controllers/TestPromptController.cpp
 
   # Files depedency
+  ${CMAKE_SOURCE_DIR}/src/controllers/PromptController.cpp
   ${CMAKE_SOURCE_DIR}/src/model/Prompt.cpp
   ${CMAKE_SOURCE_DIR}/src/services/prompt/PromptService.cpp
-  ${CMAKE_SOURCE_DIR}/src/services/CRUDService.cpp
-  ${CMAKE_SOURCE_DIR}/src/controllers/PromptController.cpp
 )
 
 add_executable(CppRestTest ${GTEST_SRCS})
