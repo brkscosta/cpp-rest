@@ -1,9 +1,7 @@
 # .clang-format configuration for C++ projects
 
-# Padrões para o estilo do C++
 Language: Cpp
 
-# Estilo de formatação geral
 BasedOnStyle: LLVM
 AccessModifierOffset: -2
 AlignAfterOpenBracket: false
