@@ -1,4 +1,6 @@
 #pragma once
+
+#include "ICRUDService.h"
 #include <iostream>
 #include <memory>
 #include <restbed>
@@ -8,15 +10,15 @@
 namespace rest::service
 {
 template <typename T>
-class CRUDService
+class CRUDService : public ICRUDService<T>
 {
   public:
     CRUDService(const std::shared_ptr<restbed::Service>& listener);
-    ~CRUDService() = default;
+    virtual ~CRUDService() = default;
 
     T fromJSON(const std::string& json);
-    void get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData);
-    void post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item);
+    void get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData) override;
+    void post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item) override;
 
   private:
     std::shared_ptr<restbed::Service> m_listener;

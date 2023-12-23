@@ -1,11 +1,11 @@
 
-POST http://localhost:8080/prompt
+POST http://localhost:8080/prompts/add
 Content-Type: application/json
 
 {
   "title": "My Title",
-  "template": "My nive template"
-}  
+  "template": "My nice template"
+}
 
 ###
 

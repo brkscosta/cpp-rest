@@ -42,10 +42,8 @@ std::optional<D> MemoRepo<D, I>::findPromptById(const std::string& id)
     {
         return *it;
     }
-    else
-    {
-        return std::nullopt;
-    }
+
+    return std::nullopt;
 }
 
 template <typename D, typename I>
@@ -65,14 +63,13 @@ typename IMemoRepo<D, I>::ManyOrNullResults MemoRepo<D, I>::searchByTitle(const 
     {
         return std::optional<D>(matchingElements[0]);
     }
-    else if (matchingElements.size() > 1)
+
+    if (matchingElements.size() > 1)
     {
         return matchingElements;
     }
-    else
-    {
-        return std::nullopt;
-    }
+
+    return std::nullopt;
 }
 
 template class rest::repository::MemoRepo<std::shared_ptr<rest::model::Prompt>, std::string>;

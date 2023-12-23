@@ -11,7 +11,7 @@ class MemoRepo : public IMemoRepo<D, I>
 {
   public:
     MemoRepo();
-    ~MemoRepo() = default;
+    virtual ~MemoRepo() = default;
     void add(const D& value) override;
     void remove(const I& value) override;
     std::vector<D> findAll() override;

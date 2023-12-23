@@ -1,9 +1,9 @@
 #include "CRUDService.h"
 #include "Prompt.h"
-#include "corvusoft/restbed/status_code.hpp"
-#include "nlohmann/json_fwd.hpp"
+#include "corvusoft/restbed/service.hpp"
 #include <cstdint>
 #include <memory>
+#include <nlohmann/json_fwd.hpp>
 #include <string>
 #include <vector>
 
@@ -16,13 +16,10 @@ const std::string HEADER_CONTENT_LENGTH = "Content-Length";
 
 std::multimap<std::string, std::string> buildJsonResponseHeader(const std::uint16_t& messageContentLength)
 {
-    return {
-        { HEADER_CONTENT_LENGTH, std::to_string(messageContentLength) },
-        {"Content-Type", "application/json" }
-    };
+    return { { HEADER_CONTENT_LENGTH, std::to_string(messageContentLength) }, {"Content-Type", "application/json"} };
 };
 
-};
+};  // namespace
 
 template <typename T>
 CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
@@ -36,10 +33,7 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
 
     m_listener->set_not_found_handler([](const std::shared_ptr<restbed::Session>& session)
     {
-        const auto request = session->get_request();
-        const std::string method = request->get_method();
-        const std::string path = request->get_path();
-
+        std::cout << "Endpoint not found" << std::endl;
         session->close(restbed::BAD_REQUEST);
     });
 }
