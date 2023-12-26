@@ -2,13 +2,13 @@
 
 ## Install developement tools
 
-- Install clangd language server and clang-format and g++ 9.5.0
-
-For clangd check the steps:
+Install clangd clang-tidy clang-format and g++-9 compiler:
 
 ```bash
-sudo apt install -y clangd-15 clang-format-15 g++-9
+sudo apt install -y clang-tidy-15 clangd-15 clang-format-15 clang-format-15 g++-9
 ```
+
+Create links:
 
 ```bash
 sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
@@ -16,6 +16,14 @@ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
 
 ```bash
 sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-15 100
+```
+
+```bash
+sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-15 15
+```
+
+```bash
+sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-15 15
 ```
 
 Install gdb for debugging:
