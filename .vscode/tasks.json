@@ -2,12 +2,37 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build",
+            "label": "Configure and Build",
             "type": "shell",
             "command": "${workspaceFolder}/build.sh",
             "group": {
                 "kind": "build",
-                "isDefault": true
+            }
+        },
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "--directory=${workspaceFolder}/build",
+                "--no-print-directory",
+                "CppRest",
+            ],
+            "group": {
+                "kind": "build",
+            }
+        },
+        {
+            "label": "Build Tests",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "--directory=${workspaceFolder}/build",
+                "--no-print-directory",
+                "CppRestTest",
+            ],
+            "group": {
+                "kind": "build",
             }
         }
     ]

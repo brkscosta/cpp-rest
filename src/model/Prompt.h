@@ -1,4 +1,9 @@
 #pragma once
+
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 #include <string>
 
 namespace rest::model
@@ -6,14 +11,11 @@ namespace rest::model
 class Prompt
 {
   public:
-    Prompt();
+    Prompt(const std::string& title, const std::string& bodyTemplate);
     ~Prompt() = default;
 
-    void setId(const std::string& id);
     std::string getId();
-    void setTitle(const std::string& title);
     std::string getTitle();
-    void setTemplate(const std::string& value);
     std::string getTemplate();
 
   private:

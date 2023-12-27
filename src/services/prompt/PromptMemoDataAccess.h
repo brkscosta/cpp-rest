@@ -29,7 +29,7 @@ class PromptMemoDataAccess : public model::IPromptDAO
     ~PromptMemoDataAccess() = default;
 
     std::vector<std::shared_ptr<model::Prompt>> listAllPrompts() override;
-    std::optional<std::shared_ptr<model::Prompt>> findPromptById(std::string& id) override;
+    std::optional<std::shared_ptr<model::Prompt>> findPromptById(const std::string& id) override;
     void addPrompt(const std::shared_ptr<model::Prompt>& prompt) override;
 
   private:

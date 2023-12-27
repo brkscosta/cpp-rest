@@ -1,57 +1,47 @@
 #pragma once
-#include "PromptMemoDataAccess.h"
-#include "PromptService.h"
-#include <corvusoft/restbed/session.hpp>
-#include <memory>
 
-namespace restbed
-{
-class Service;
-class Session;
-}
+#include "IRestController.h"
+#include <memory>
+#include <restbed>
+#include <string>
 
 namespace rest::model
 {
-class Prompt;
+class CreatePromptDto;
 }
 
 namespace rest::service
 {
 template <typename T>
-class CRUDService;
+class ICRUDService;
+class PromptService;
 }  // namespace rest::service
 
 namespace rest::controller
 {
 
-/*
- * Rest PromptController
- * @param std::shared_ptr<service::PromptService>
- */
-class PromptController
+class PromptController : public IRestController
 {
   public:
     PromptController(
-      const std::shared_ptr<restbed::Service>& service,
-      const std::shared_ptr<service::PromptService>& promptService
-    );
-    ~PromptController() = default;
+        const std::shared_ptr<service::PromptService>& promptService,
+        const std::shared_ptr<service::ICRUDService<model::CreatePromptDto>>& promptCrudService,
+        const std::shared_ptr<restbed::Resource>& resource
+      );
+    ~PromptController() override = default;
 
-    /*
-     * Handle the get request
-     * @param const std::shared_ptr<restbed::Session>&
-     */
-    void handleGet(const std::shared_ptr<restbed::Session>& session);
-
-    /*
-     * Handle the post request
-     * @param const std::shared_ptr<restbed::Session>&
-     */
-    void handlePost(const std::shared_ptr<restbed::Session>& session);
+    std::shared_ptr<restbed::Resource> getResource() override;
 
   private:
-    std::shared_ptr<service::CRUDService<model::Prompt>> m_promptCRUDService;
+    void onGetAllPrompts(const std::shared_ptr<restbed::Session>& session);
+    void onAddNewPrompt(const std::shared_ptr<restbed::Session>& session);
+    void onGetPrompt(const std::shared_ptr<restbed::Session>& session);
+    void onGet(const std::shared_ptr<restbed::Session>& session);
+
     std::shared_ptr<service::PromptService> m_promptService;
+    std::shared_ptr<service::ICRUDService<model::CreatePromptDto>> m_crudService;
+    std::shared_ptr<restbed::Resource> m_resource;
+    std::string m_loggerPrefix;
 };
 
-};  // namespace rest::controller
+}  // namespace rest::controller

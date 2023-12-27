@@ -1,11 +1,12 @@
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(SOURCE_MODEL_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(SOURCE_FILES
-  ${SOURCE_DIR}/Prompt.cpp
+  ${SOURCE_MODEL_DIR}/Prompt.cpp
+  ${SOURCE_MODEL_DIR}/CreatePromptDto.cpp
 )
 
 target_sources(CppRest PRIVATE ${SOURCE_FILES})
 
-target_include_directories(CppRest PRIVATE
-  ${SOURCE_DIR}
+include_directories(CppRest PRIVATE
+  ${SOURCE_MODEL_DIR}
 )

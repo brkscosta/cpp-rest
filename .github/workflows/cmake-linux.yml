@@ -1,43 +1,46 @@
 # This starter workflow is for a CMake project running on a single platform. There is a different starter workflow if you need cross-platform coverage.
 # See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-multi-platform.yml
-name: CMake on a single platform
+name: CMake Linux
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "develop"]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "develop"]
 
 env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
+  BUILD_TYPE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'Release' || 'Debug' }}
+  HAS_GTEST: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'OFF' || 'ON' }}
 
 jobs:
   build:
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-20.04
-
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Install ASIO
-      # Install ASIO as project depedency
-      run: sudo apt-get install -y libasio-dev
-      
-    - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_SSL=NO -DBUILD_TESTS=NO
+      - uses: actions/checkout@v2
 
-    - name: Build
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      - name: Install pip
+        run: sudo apt-get install -y python3-pip
 
-    # - name: Test
-      # working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      # run: ctest -C ${{env.BUILD_TYPE}}
+      - name: Install conan
+        run: pip install conan==1.59
 
+      - name: Create conan profile
+        run: conan profile new --detect default
+
+      - name: Updating default profile
+        run: | 
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+          conan profile update settings.compiler.version=9.4 default
+          conan profile update settings.build_type="${BUILD_TYPE}" default
+
+      - name: Install conan packages
+        run: |
+          mkdir build
+          cd build
+          conan install .. --build=missing
+
+      - name: Configure CMake and Build
+        run: |
+          cd build
+          cmake -DSERVER_PORT=8080 -DHAS_GTEST="${HAS_GTEST}" -DVERSION="${VERSION:-1.0.0}" -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" ..
+          cmake --build .

@@ -1,11 +1,12 @@
 
-POST http://localhost:8080/resource
+POST http://localhost:8080/prompts/add
 Content-Type: application/json
 
 {
-  "teste": "yau"
+  "title": "My Title",
+  "template": "My nice template"
 }
 
 ###
 
-GET http://localhost:8080/test
+GET http://localhost:8080/prompts

@@ -1,46 +1,31 @@
+#include "CRUDService.h"
 #include "MemoRepo.h"
 #include "Prompt.h"
 #include "PromptController.h"
 #include "PromptMemoDataAccess.h"
-#include <algorithm>
-#include <cstdint>
-#include <cstdlib>
-#include <iostream>
-#include <map>
-#include <memory>
-#include <ratio>
-#include <restbed>
+#include "PromptService.h"
 #include "config.h"
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <restbed>
+#include <string>
 
-using namespace restbed;
 using namespace rest;
-
-static const uint16_t SERVER_PORT = 8080;
 
 int main(const int, const char**)
 {
-    auto service = std::make_shared<Service>();
-    auto promptMemoDao = std::make_shared<service::PromptMemoDataAccess>(std::make_shared<repository::MemoRepo<std::shared_ptr<model::Prompt>, std::string>>());
-    auto promptService = std::make_shared<service::PromptService>(promptMemoDao);
-    auto promptController = std::make_shared<controller::PromptController>(service, promptService);
+    const auto service = std::make_shared<restbed::Service>();
+    const auto settings = std::make_shared<restbed::Settings>();
+    const auto promptMemoDao = std::make_shared<service::PromptMemoDataAccess>(std::make_shared<repository::MemoRepo<std::shared_ptr<model::Prompt>, std::string>>());
+    const auto promptService = std::make_shared<service::PromptService>(promptMemoDao);
+    const auto crudPromptService = std::make_shared<service::CRUDService<model::CreatePromptDto>>(service);
+    const auto promptController = std::make_shared<controller::PromptController>(promptService, crudPromptService, std::make_shared<restbed::Resource>());
 
-    auto promptResource = std::make_shared<Resource>();
-    promptResource->set_path("/prompts");
-    promptResource->set_method_handler("POST", [promptController](const std::shared_ptr<Session>& session)
-    {
-        promptController->handlePost(session);
-    });
-
-    promptResource->set_method_handler("GET", [promptController](const std::shared_ptr<Session>& session)
-    {
-        promptController->handleGet(session);
-    });
-
-    auto settings = std::make_shared<Settings>();
-    settings->set_port(SERVER_PORT);
+    settings->set_port(std::stoi(SERVER_PORT));
     settings->set_default_header("Connection", "close");
 
-    service->publish(promptResource);
+    service->publish(promptController->getResource());
 
     std::cout << "Server started on port: " << SERVER_PORT << "\n Version: " << VERSION << "\n Commit: " << GIT_COMMIT_HASH << std::endl;
 

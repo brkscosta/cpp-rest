@@ -1,2 +1,3 @@
 // config.h.in
 #define VERSION "@VERSION@"
+#define SERVER_PORT "@SERVER_PORT@"

@@ -1,28 +1,26 @@
-// CRUDService.h
 #pragma once
+
+#include "ICRUDService.h"
 #include <iostream>
 #include <memory>
 #include <restbed>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 namespace rest::service
 {
 template <typename T>
-class CRUDService
+class CRUDService : public ICRUDService<T>
 {
   public:
     CRUDService(const std::shared_ptr<restbed::Service>& listener);
-    ~CRUDService() = default;
+    virtual ~CRUDService() = default;
 
-  public:
-    void get(const std::shared_ptr<restbed::Session>& session, const std::string& path);
-    void post(const std::shared_ptr<restbed::Session>& session);
-    std::string to_json(const T& item);
-    T from_json(const std::string& json);
+    void get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData) override;
+    void post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item) override;
 
   private:
     std::shared_ptr<restbed::Service> m_listener;
-    std::vector<T> m_data;
 };
 
 }  // namespace rest::service

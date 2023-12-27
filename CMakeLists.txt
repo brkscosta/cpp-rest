@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 project(CppRest)
 
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+option(HAS_GTEST "Build with Google Test support" OFF)
 
 execute_process(
     COMMAND git rev-parse --short HEAD
@@ -15,7 +20,10 @@ add_compile_definitions(GIT_COMMIT_HASH="${GIT_COMMIT_HASH}")
 
 include_directories(${CMAKE_BINARY_DIR})
 
-add_subdirectory(lib/restbed)
 add_subdirectory(src)
+if(HAS_GTEST)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
 
 configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h)

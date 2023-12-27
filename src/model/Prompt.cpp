@@ -2,7 +2,10 @@
 
 using namespace rest::model;
 
-Prompt::Prompt()
+Prompt::Prompt(const std::string& title, const std::string& bodyTemplate)
+    : m_id(boost::lexical_cast<std::string>(boost::uuids::random_generator()()))
+    , m_title(title)
+    , m_template(bodyTemplate)
 {}
 
 std::string Prompt::getId()
@@ -18,19 +21,4 @@ std::string Prompt::getTitle()
 std::string Prompt::getTemplate()
 {
     return m_template;
-}
-
-void Prompt::setId(const std::string& id)
-{
-    m_id = id;
-}
-
-void Prompt::setTemplate(const std::string& value)
-{
-    m_template = value;
-}
-
-void Prompt::setTitle(const std::string& title)
-{
-    m_title = title;
 }

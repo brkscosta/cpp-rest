@@ -22,7 +22,7 @@ std::vector<std::shared_ptr<model::Prompt>> PromptMemoDataAccess::listAllPrompts
     return m_memoRepo->findAll();
 }
 
-std::optional<std::shared_ptr<model::Prompt>> PromptMemoDataAccess::findPromptById(std::string& id)
+std::optional<std::shared_ptr<model::Prompt>> PromptMemoDataAccess::findPromptById(const std::string& id)
 {
     return m_memoRepo->findPromptById(id);
 }

@@ -1,7 +1,26 @@
 #include "CRUDService.h"
-#include "Prompt.h"
+#include "CreatePromptDto.h"
+#include "corvusoft/restbed/status_code.hpp"
+#include <cstdint>
+#include <memory>
+#include <nlohmann/json_fwd.hpp>
+#include <restbed>
+#include <string>
+#include <vector>
 
 using namespace rest::service;
+using namespace nlohmann;
+
+namespace
+{
+const std::string HEADER_CONTENT_LENGTH = "Content-Length";
+
+std::multimap<std::string, std::string> buildJsonResponseHeader(const std::uint16_t& messageContentLength)
+{
+    return { { HEADER_CONTENT_LENGTH, std::to_string(messageContentLength) }, {"Content-Type", "application/json"} };
+};
+
+};  // namespace
 
 template <typename T>
 CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
@@ -9,60 +28,59 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
 {
     m_listener->set_error_handler([](const int, const std::exception& error, const std::shared_ptr<restbed::Session>& session)
     {
-        std::cout << "Erro ao processar a requisição: " << error.what() << std::endl;
+        std::cout << "Error on precessing request: " << error.what() << std::endl;
         session->close(restbed::BAD_REQUEST);
     });
 
-    m_listener->set_not_found_handler([this](const std::shared_ptr<restbed::Session>& session)
+    m_listener->set_not_found_handler([](const std::shared_ptr<restbed::Session>& session)
     {
-        const auto request = session->get_request();
-        const std::string method = request->get_method();
-        const std::string path = request->get_path();
-
-        if (method == "GET" && path.substr(0, 6) == "/data/")
-        {
-            get(session, path);
-        }
-        else if (method == "POST" && path == "/data")
-        {
-            post(session);
-        }
-        else
-        {
-            session->close(restbed::BAD_REQUEST);
-        }
+        std::cout << "Endpoint not found" << std::endl;
+        session->close(restbed::BAD_REQUEST);
     });
 }
 
 template <typename T>
-void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const std::string& path)
+void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData)
 {
-    const size_t index = std::stoi(path.substr(6));
-    if (index >= 0 && index < m_data.size())
+    if (jsonData.empty())
     {
-        const T& item = m_data[index];
-        const std::string response_body = to_json(item);
+        nlohmann::json responseMessage = {
+            {"message", "Resource not found"}
+        };
 
-        session->close(restbed::OK, response_body, {{"Content-Length", std::to_string(response_body.length())}});
+        std::string strResponseMessage = responseMessage.dump(2);
+        session->close(restbed::NOT_FOUND, strResponseMessage, buildJsonResponseHeader(strResponseMessage.length()));
+        return;
     }
-    else
-    {
-        session->close(restbed::NOT_FOUND);
-    }
+
+    session->close(restbed::OK, jsonData, buildJsonResponseHeader(jsonData.length()));
 }
 
 template <typename T>
-void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session)
+void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item)
 {
-    auto contentLength = session->get_request()->get_header("Content-Length", 0);
-    session->fetch(contentLength, [this](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)
+    auto contentLength = session->get_request()->get_header(HEADER_CONTENT_LENGTH, 0);
+
+    session->fetch(contentLength, [&item](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)
     {
         try
         {
-            const std::string body_str(body.begin(), body.end());
-            const T item = from_json(body_str);
+            const std::string bodyRequest(body.begin(), body.end());
+            auto data = json::parse(bodyRequest);
 
-            // m_data.push_back(item);
+            if (!T::validate(data).empty())
+            {
+                std::vector<std::string> missingFields = T::validate(data);
+                nlohmann::json responseMessage = {
+                    {"message", "Data is not valid some of the properties is missing!"},
+                    {"fields", missingFields}
+                };
+                std::string strResponseMessage = responseMessage.dump(2);
+                session->close(restbed::BAD_REQUEST, strResponseMessage, buildJsonResponseHeader(strResponseMessage.length()));
+                return;
+            }
+
+            item = std::make_shared<T>(data);
             session->close(restbed::CREATED);
         }
         catch (const std::exception& e)
@@ -72,17 +90,4 @@ void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session)
     });
 }
 
-template <typename T>
-std::string CRUDService<T>::to_json(const T& item)
-{
-    return "";
-}
-
-template <typename T>
-T CRUDService<T>::from_json(const std::string& json)
-{
-    T item;
-    return item;
-}
-
-template class rest::service::CRUDService<rest::model::Prompt>;
+template class rest::service::CRUDService<rest::model::CreatePromptDto>;

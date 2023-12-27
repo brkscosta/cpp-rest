@@ -13,8 +13,6 @@ class IMemoRepo
   public:
     using ManyOrNullResults = std::variant<std::vector<D>, std::optional<D>>;
 
-  public:
-
     /*
     * Adds an element to the memory
     */
