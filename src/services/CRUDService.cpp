@@ -1,9 +1,10 @@
 #include "CRUDService.h"
-#include "Prompt.h"
-#include "corvusoft/restbed/service.hpp"
+#include "CreatePromptDto.h"
+#include "corvusoft/restbed/status_code.hpp"
 #include <cstdint>
 #include <memory>
 #include <nlohmann/json_fwd.hpp>
+#include <restbed>
 #include <string>
 #include <vector>
 
@@ -39,12 +40,6 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
 }
 
 template <typename T>
-T CRUDService<T>::fromJSON(const std::string& json)
-{
-    return json::parse(json);
-}
-
-template <typename T>
 void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData)
 {
     if (jsonData.empty())
@@ -66,12 +61,24 @@ void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session, std:
 {
     auto contentLength = session->get_request()->get_header(HEADER_CONTENT_LENGTH, 0);
 
-    session->fetch(contentLength, [this, &item](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)
+    session->fetch(contentLength, [&item](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)
     {
         try
         {
             const std::string bodyRequest(body.begin(), body.end());
-            const T data = fromJSON(bodyRequest);
+            auto data = json::parse(bodyRequest);
+
+            if (!T::validate(data).empty())
+            {
+                std::vector<std::string> missingFields = T::validate(data);
+                nlohmann::json responseMessage = {
+                    {"message", "Data is not valid some of the properties is missing!"},
+                    {"fields", missingFields}
+                };
+                std::string strResponseMessage = responseMessage.dump(2);
+                session->close(restbed::BAD_REQUEST, strResponseMessage, buildJsonResponseHeader(strResponseMessage.length()));
+                return;
+            }
 
             item = std::make_shared<T>(data);
             session->close(restbed::CREATED);
@@ -83,4 +90,4 @@ void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session, std:
     });
 }
 
-template class rest::service::CRUDService<rest::model::Prompt>;
+template class rest::service::CRUDService<rest::model::CreatePromptDto>;

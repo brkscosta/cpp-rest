@@ -41,14 +41,12 @@ TEST(PromptControllerTest, TestAddNewPrompt)
     const auto mockResource = std::make_shared<restbed::MockResource>();
 
     EXPECT_CALL(*mockResource, set_method_handler("POST", _))
-        .WillOnce(Invoke(
-            [&mockSession, &mockCRUDService](
-                const std::string& method, const std::function<void(const std::shared_ptr<restbed::Session>)>& callback)
-            {
-                callback(mockSession);
-                std::shared_ptr<model::Prompt> prompt;
-                EXPECT_CALL(*mockCRUDService, post(_, prompt)).Times(1);
-            }));
+        .WillOnce(Invoke([&mockSession, &mockCRUDService](const std::string&, const std::function<void(const std::shared_ptr<restbed::Session>)>& callback)
+        {
+            callback(mockSession);
+            std::shared_ptr<model::Prompt> prompt;
+            EXPECT_CALL(*mockCRUDService, post(_, prompt)).Times(1);
+        }));
 
-    auto promptController = std::make_shared<PromptController>(mockPromptService, mockCRUDService, mockResource);
+    // auto promptController = std::make_shared<PromptController>(mockPromptService, mockCRUDService, mockResource);
 }

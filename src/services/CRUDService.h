@@ -16,7 +16,6 @@ class CRUDService : public ICRUDService<T>
     CRUDService(const std::shared_ptr<restbed::Service>& listener);
     virtual ~CRUDService() = default;
 
-    T fromJSON(const std::string& json);
     void get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData) override;
     void post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item) override;
 

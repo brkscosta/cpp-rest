@@ -19,6 +19,7 @@ SET(GTEST_SRCS
   # Files depedency
   ${CMAKE_SOURCE_DIR}/src/controllers/PromptController.cpp
   ${CMAKE_SOURCE_DIR}/src/model/Prompt.cpp
+  ${CMAKE_SOURCE_DIR}/src/model/CreatePromptDto.cpp
   ${CMAKE_SOURCE_DIR}/src/services/prompt/PromptService.cpp
 )
 

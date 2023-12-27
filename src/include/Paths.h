@@ -6,8 +6,8 @@
 namespace rest::paths
 {
 const std::set<std::string>& PROMPTS = {
+    "/prompts/{id: .*}",
     "/prompts",
-    "/prompts/add",
-    "/prompts/listAll"
+    "/prompts/add"
 };
 }  // namespace rest::paths

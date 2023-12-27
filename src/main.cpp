@@ -5,7 +5,6 @@
 #include "PromptMemoDataAccess.h"
 #include "PromptService.h"
 #include "config.h"
-#include "corvusoft/restbed/resource.hpp"
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -20,7 +19,7 @@ int main(const int, const char**)
     const auto settings = std::make_shared<restbed::Settings>();
     const auto promptMemoDao = std::make_shared<service::PromptMemoDataAccess>(std::make_shared<repository::MemoRepo<std::shared_ptr<model::Prompt>, std::string>>());
     const auto promptService = std::make_shared<service::PromptService>(promptMemoDao);
-    const auto crudPromptService = std::make_shared<service::CRUDService<model::Prompt>>(service);
+    const auto crudPromptService = std::make_shared<service::CRUDService<model::CreatePromptDto>>(service);
     const auto promptController = std::make_shared<controller::PromptController>(promptService, crudPromptService, std::make_shared<restbed::Resource>());
 
     settings->set_port(std::stoi(SERVER_PORT));
