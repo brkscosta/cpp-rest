@@ -5,6 +5,9 @@ set(SOURCE_FILES
   ${SOURCE_SERVICES_DIR}/prompt/PromptMemoDataAccess.cpp
   ${SOURCE_SERVICES_DIR}/prompt/PromptService.cpp
   ${SOURCE_SERVICES_DIR}/CRUDService.cpp
+  ${SOURCE_SERVICES_DIR}/RequestWrapper.cpp
+  ${SOURCE_SERVICES_DIR}/ResourceWrapper.cpp
+  ${SOURCE_SERVICES_DIR}/SessionWrapper.cpp
 )
 
 include_directories(CppRest PRIVATE

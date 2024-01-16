@@ -21,6 +21,9 @@ SET(GTEST_SRCS
   ${CMAKE_SOURCE_DIR}/src/model/Prompt.cpp
   ${CMAKE_SOURCE_DIR}/src/model/CreatePromptDto.cpp
   ${CMAKE_SOURCE_DIR}/src/services/prompt/PromptService.cpp
+  ${CMAKE_SOURCE_DIR}/src/services/ResourceWrapper.cpp
+  ${CMAKE_SOURCE_DIR}/src/services/RequestWrapper.cpp
+  ${CMAKE_SOURCE_DIR}/src/services/SessionWrapper.cpp
 )
 
 add_executable(CppRestTest ${GTEST_SRCS})
