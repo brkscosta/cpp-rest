@@ -1,10 +1,9 @@
 #include "PromptController.h"
 #include "CRUDService.h"
-#include "CreatePromptDto.h"
+#include "IPromptService.h"
+#include "IResourceWrapper.h"
 #include "Paths.h"
 #include "PromptMemoDataAccess.h"
-#include "PromptService.h"
-#include "corvusoft/restbed/rule.hpp"
 #include <functional>
 #include <memory>
 #include <regex>
@@ -12,62 +11,57 @@
 using namespace rest::controller;
 
 PromptController::PromptController(
-    const std::shared_ptr<service::PromptService>& promptService,
+    const std::shared_ptr<service::IPromptService>& promptService,
     const std::shared_ptr<service::ICRUDService<model::CreatePromptDto>>& promptCrudService,
-    const std::shared_ptr<restbed::Resource>& resource
+    const std::shared_ptr<service::IResourceWrapper>& resource
     )
     : m_promptService(promptService)
     , m_crudService(promptCrudService)
-    , m_resource(resource)
+    , m_resourceWrapper(resource)
     , m_loggerPrefix("PromptController::")
 {
-    m_resource->set_paths(rest::paths::PROMPTS);
+    m_resourceWrapper->setPaths(rest::paths::PROMPTS);
 
-    m_resource->set_method_handler("POST", std::bind(&PromptController::onAddNewPrompt, this, std::placeholders::_1));
-    m_resource->set_method_handler("GET", std::bind(&PromptController::onGet, this, std::placeholders::_1));
+    m_resourceWrapper->setMethodHandler("POST", std::bind(&PromptController::onAddNewPrompt, this, std::placeholders::_1));
+    m_resourceWrapper->setMethodHandler("GET", std::bind(&PromptController::onGet, this, std::placeholders::_1));
 }
 
-std::shared_ptr<restbed::Resource> PromptController::getResource()
-{
-    return m_resource;
-}
-
-void PromptController::onAddNewPrompt(const std::shared_ptr<restbed::Session>& session)
+void PromptController::onAddNewPrompt(const std::shared_ptr<service::ISessionWrapper>& sessionWrapper)
 {
     std::shared_ptr<model::CreatePromptDto> promptDto;
-    m_crudService->post(session, promptDto);
+    m_crudService->post(sessionWrapper->getCurrentSession(), promptDto);
 
     m_promptService->addNewPrompt(promptDto);
 }
 
-void PromptController::onGet(const std::shared_ptr<restbed::Session>& session)
+void PromptController::onGet(const std::shared_ptr<service::ISessionWrapper>& sessionWrapper)
 {
-    const auto request = session->get_request();
-    const auto hasPathParameters = !request->get_path_parameters().empty();
+    const auto request = sessionWrapper->getRequest();
+    const auto hasPathParameters = !request->getPathParameters("").empty();
 
     if (hasPathParameters)
     {
-        onGetPrompt(session);
+        onGetPrompt(sessionWrapper);
     }
     else
     {
-        onGetAllPrompts(session);
+        onGetAllPrompts(sessionWrapper);
     }
 }
 
-void PromptController::onGetAllPrompts(const std::shared_ptr<restbed::Session>& session)
+void PromptController::onGetAllPrompts(const std::shared_ptr<service::ISessionWrapper>& sessionWrapper)
 {
     auto jsonStringPrompts = m_promptService->getAllPrompts();
 
-    m_crudService->get(session, jsonStringPrompts);
+    m_crudService->get(sessionWrapper->getCurrentSession(), jsonStringPrompts);
 }
 
-void PromptController::onGetPrompt(const std::shared_ptr<restbed::Session>& session)
+void PromptController::onGetPrompt(const std::shared_ptr<service::ISessionWrapper>& sessionWrapper)
 {
-    const auto pathParameters = session->get_request()->get_path_parameters("id");
+    const auto pathParameters = sessionWrapper->getRequest()->getPathParameters("id");
 
     std::string id = pathParameters.at("id");
     auto prompt = m_promptService->getPrompt(id);
 
-    m_crudService->get(session, prompt);
+    m_crudService->get(sessionWrapper->getCurrentSession(), prompt);
 }

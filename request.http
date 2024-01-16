@@ -8,5 +8,7 @@ Content-Type: application/json
 }
 
 ###
-
 GET http://localhost:8080/prompts
+
+###
+GET http://localhost:8080/prompts/4fb7d46d-9685-4a8c-94ed-25e15f1cb5a1

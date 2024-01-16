@@ -59,6 +59,10 @@ void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const
 template <typename T>
 void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item)
 {
+    if (!session) {
+        return;
+    }
+
     auto contentLength = session->get_request()->get_header(HEADER_CONTENT_LENGTH, 0);
 
     session->fetch(contentLength, [&item](const std::shared_ptr<restbed::Session>& session, const restbed::Bytes& body)

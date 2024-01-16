@@ -1,6 +1,5 @@
 #pragma once
 
-#include "IRestController.h"
 #include <memory>
 #include <restbed>
 #include <string>
@@ -15,32 +14,33 @@ namespace rest::service
 template <typename T>
 class ICRUDService;
 class PromptService;
+class IResourceWrapper;
+class IPromptService;
+class ISessionWrapper;
 }  // namespace rest::service
 
 namespace rest::controller
 {
 
-class PromptController : public IRestController
+class PromptController
 {
   public:
     PromptController(
-        const std::shared_ptr<service::PromptService>& promptService,
+        const std::shared_ptr<service::IPromptService>& promptService,
         const std::shared_ptr<service::ICRUDService<model::CreatePromptDto>>& promptCrudService,
-        const std::shared_ptr<restbed::Resource>& resource
+        const std::shared_ptr<service::IResourceWrapper>& resource
       );
-    ~PromptController() override = default;
-
-    std::shared_ptr<restbed::Resource> getResource() override;
+    ~PromptController() = default;
 
   private:
-    void onGetAllPrompts(const std::shared_ptr<restbed::Session>& session);
-    void onAddNewPrompt(const std::shared_ptr<restbed::Session>& session);
-    void onGetPrompt(const std::shared_ptr<restbed::Session>& session);
-    void onGet(const std::shared_ptr<restbed::Session>& session);
+    void onGetAllPrompts(const std::shared_ptr<service::ISessionWrapper>& session);
+    void onAddNewPrompt(const std::shared_ptr<service::ISessionWrapper>& session);
+    void onGetPrompt(const std::shared_ptr<service::ISessionWrapper>& session);
+    void onGet(const std::shared_ptr<service::ISessionWrapper>& session);
 
-    std::shared_ptr<service::PromptService> m_promptService;
+    std::shared_ptr<service::IPromptService> m_promptService;
     std::shared_ptr<service::ICRUDService<model::CreatePromptDto>> m_crudService;
-    std::shared_ptr<restbed::Resource> m_resource;
+    std::shared_ptr<service::IResourceWrapper> m_resourceWrapper;
     std::string m_loggerPrefix;
 };
 
