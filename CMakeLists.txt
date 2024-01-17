@@ -7,6 +7,11 @@ conan_basic_setup()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+find_program(CLANG_TIDY_EXE NAMES "clang-tidy" "clang-tidy-<version>")
+if (CLANG_TIDY_EXE AND CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-checks=*")
+endif ()
+
 option(HAS_GTEST "Build with Google Test support" OFF)
 
 execute_process(

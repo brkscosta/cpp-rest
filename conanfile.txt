@@ -3,7 +3,6 @@ boost/1.77.0
 restbed/4.8
 gtest/1.14.0
 nlohmann_json/3.11.3
-crossguid/0.2.2
 
 [tool_requires]
 cmake/3.22.6
