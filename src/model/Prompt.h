@@ -6,11 +6,10 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <string>
 
-namespace rest::model
-{
+namespace rest::model {
 class Prompt
 {
-  public:
+public:
     Prompt(const std::string& title, const std::string& bodyTemplate);
     ~Prompt() = default;
 
@@ -18,10 +17,10 @@ class Prompt
     std::string getTitle();
     std::string getTemplate();
 
-  private:
+private:
     std::string m_id;
     std::string m_title;
     std::string m_template;
 };
 
-}  // namespace rest::model
+}   // namespace rest::model

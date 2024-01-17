@@ -1,5 +1,7 @@
 #include "ResourceWrapper.h"
+
 #include "SessionWrapper.h"
+
 #include <memory>
 
 using namespace rest::service;
@@ -13,10 +15,10 @@ void ResourceWrapper::setPaths(const std::set<std::string>& paths)
     m_resource->set_paths(paths);
 }
 
-void ResourceWrapper::setMethodHandler(
-    const std::string& method, const std::function<void(const std::shared_ptr<ISessionWrapper>)>& callback)
+void ResourceWrapper::setMethodHandler(const std::string& method,
+                                       const std::function<void(const std::shared_ptr<ISessionWrapper>)>& callback)
 {
-    m_resource->set_method_handler(method, [callback](const std::shared_ptr<restbed::Session>& session)
+    m_resource->set_method_handler(method, [&callback](const std::shared_ptr<restbed::Session>& session)
     {
         const auto sessionWrapper = std::make_shared<SessionWrapper>(session);
         callback(sessionWrapper);

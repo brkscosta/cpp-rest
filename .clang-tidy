@@ -47,4 +47,5 @@ Checks: '-*,
   readability-simplify-*,
   readability-static-*,
   readability-string-compare,
-  readability-uniqueptr-delete-release'
+  readability-uniqueptr-delete-release,
+  readability-redundant-access-specifiers'

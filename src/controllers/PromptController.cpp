@@ -1,9 +1,11 @@
 #include "PromptController.h"
+
 #include "CRUDService.h"
 #include "IPromptService.h"
 #include "IResourceWrapper.h"
 #include "Paths.h"
 #include "PromptMemoDataAccess.h"
+
 #include <functional>
 #include <memory>
 #include <regex>
@@ -11,10 +13,9 @@
 using namespace rest::controller;
 
 PromptController::PromptController(
-    const std::shared_ptr<service::IPromptService>& promptService,
-    const std::shared_ptr<service::ICRUDService<model::CreatePromptDto>>& promptCrudService,
-    const std::shared_ptr<service::IResourceWrapper>& resource
-    )
+      const std::shared_ptr<service::IPromptService>& promptService,
+      const std::shared_ptr<service::ICRUDService<model::CreatePromptDto>>& promptCrudService,
+      const std::shared_ptr<service::IResourceWrapper>& resource)
     : m_promptService(promptService)
     , m_crudService(promptCrudService)
     , m_resourceWrapper(resource)
@@ -22,7 +23,8 @@ PromptController::PromptController(
 {
     m_resourceWrapper->setPaths(rest::paths::PROMPTS);
 
-    m_resourceWrapper->setMethodHandler("POST", std::bind(&PromptController::onAddNewPrompt, this, std::placeholders::_1));
+    m_resourceWrapper->setMethodHandler("POST",
+                                        std::bind(&PromptController::onAddNewPrompt, this, std::placeholders::_1));
     m_resourceWrapper->setMethodHandler("GET", std::bind(&PromptController::onGet, this, std::placeholders::_1));
 }
 

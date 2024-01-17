@@ -1,15 +1,16 @@
 #pragma once
 #include "IMemoRepo.h"
-#include <restbed>
+
 #include <vector>
 
-namespace rest::repository
-{
+#include <restbed>
 
-template <typename D, typename I>
+namespace rest::repository {
+
+template<typename D, typename I>
 class MemoRepo : public IMemoRepo<D, I>
 {
-  public:
+public:
     MemoRepo();
     virtual ~MemoRepo() = default;
     void add(const D& value) override;
@@ -18,8 +19,8 @@ class MemoRepo : public IMemoRepo<D, I>
     std::optional<D> findPromptById(const std::string& id) override;
     typename IMemoRepo<D, I>::ManyOrNullResults searchByTitle(const std::string& title) override;
 
-  private:
+private:
     std::vector<D> m_data;
 };
 
-}  // namespace rest::repository
+}   // namespace rest::repository

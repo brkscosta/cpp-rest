@@ -1,28 +1,34 @@
 #include "CRUDService.h"
+
 #include "CreatePromptDto.h"
 #include "corvusoft/restbed/status_code.hpp"
-#include <cstdint>
-#include <memory>
 #include <nlohmann/json_fwd.hpp>
-#include <restbed>
+
+#include <memory>
 #include <string>
 #include <vector>
+
+#include <cstdint>
+
+#include <restbed>
 
 using namespace rest::service;
 using namespace nlohmann;
 
-namespace
-{
+namespace {
 const std::string HEADER_CONTENT_LENGTH = "Content-Length";
 
 std::multimap<std::string, std::string> buildJsonResponseHeader(const std::uint16_t& messageContentLength)
 {
-    return { { HEADER_CONTENT_LENGTH, std::to_string(messageContentLength) }, {"Content-Type", "application/json"} };
+    return {
+        { HEADER_CONTENT_LENGTH, std::to_string(messageContentLength) },
+        { "Content-Type", "application/json" }
+    };
 };
 
-};  // namespace
+};   // namespace
 
-template <typename T>
+template<typename T>
 CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
     : m_listener(listener)
 {
@@ -39,14 +45,12 @@ CRUDService<T>::CRUDService(const std::shared_ptr<restbed::Service>& listener)
     });
 }
 
-template <typename T>
+template<typename T>
 void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const std::string& jsonData)
 {
     if (jsonData.empty())
     {
-        nlohmann::json responseMessage = {
-            {"message", "Resource not found"}
-        };
+        nlohmann::json responseMessage = { { "message", "Resource not found" } };
 
         std::string strResponseMessage = responseMessage.dump(2);
         session->close(restbed::NOT_FOUND, strResponseMessage, buildJsonResponseHeader(strResponseMessage.length()));
@@ -56,10 +60,11 @@ void CRUDService<T>::get(const std::shared_ptr<restbed::Session>& session, const
     session->close(restbed::OK, jsonData, buildJsonResponseHeader(jsonData.length()));
 }
 
-template <typename T>
+template<typename T>
 void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session, std::shared_ptr<T>& item)
 {
-    if (!session) {
+    if (!session)
+    {
         return;
     }
 
@@ -75,12 +80,14 @@ void CRUDService<T>::post(const std::shared_ptr<restbed::Session>& session, std:
             if (!T::validate(data).empty())
             {
                 std::vector<std::string> missingFields = T::validate(data);
-                nlohmann::json responseMessage = {
-                    {"message", "Data is not valid some of the properties is missing!"},
-                    {"fields", missingFields}
-                };
+                nlohmann::json responseMessage = { { "message",
+                                                    "Data is not valid some of the properties is "
+                                                    "missing!" },
+                                                    { "fields", missingFields } };
                 std::string strResponseMessage = responseMessage.dump(2);
-                session->close(restbed::BAD_REQUEST, strResponseMessage, buildJsonResponseHeader(strResponseMessage.length()));
+                session->close(restbed::BAD_REQUEST,
+                                strResponseMessage,
+                                buildJsonResponseHeader(strResponseMessage.length()));
                 return;
             }
 

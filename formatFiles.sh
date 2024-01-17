@@ -1,20 +1,17 @@
+#!/bin/bash
 
-find . -name '*.cpp' -o -name '*.h' | xargs clang-format-15 -i
+files=$(find . -name '*.cpp' -o -name '*.h')
+
+if [ -z "$files" ]; then
+    echo "No .cpp or.h files found to format."
+    exit 0
+fi
+
+clang-format --verbose --style=file -i $files
 
 if [ $? -eq 0 ]; then
-    echo "
-    ##############################################################
-    #                                                            #
-    #                     FILES FORMATED                         #
-    #                                                            #
-    ##############################################################
-"
+    echo "Files Formatted"
 else
-    echo "
-    ##############################################################
-    #                                                            #
-    #                     FAIL ON FORMAT                         #
-    #                                                            #
-    ##############################################################
-"
+    echo "Fail on format"
+    exit 1
 fi

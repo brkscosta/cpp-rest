@@ -2,11 +2,10 @@
 
 #include "ISessionWrapper.h"
 
-namespace rest::service
-{
+namespace rest::service {
 class SessionWrapper : public ISessionWrapper
 {
-  public:
+public:
     SessionWrapper(const std::shared_ptr<restbed::Session>& session);
 
     std::shared_ptr<IRequestWrapper> getRequest() override;
@@ -15,4 +14,4 @@ class SessionWrapper : public ISessionWrapper
     std::shared_ptr<IRequestWrapper> m_requestWrapper;
     std::shared_ptr<restbed::Session> m_session;
 };
-}  // namespace rest::service
+}   // namespace rest::service

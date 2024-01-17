@@ -1,7 +1,9 @@
 
 #include "PromptMemoDataAccess.h"
+
 #include "IMemoRepo.h"
 #include "Prompt.h"
+
 #include <algorithm>
 #include <iterator>
 #include <memory>

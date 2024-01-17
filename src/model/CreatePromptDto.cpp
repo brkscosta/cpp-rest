@@ -1,4 +1,5 @@
 #include "CreatePromptDto.h"
+
 #include <string>
 
 using namespace rest::model;
@@ -43,7 +44,7 @@ std::vector<std::string> CreatePromptDto::validate(const nlohmann::json& jsonDat
 nlohmann::json CreatePromptDto::toJson()
 {
     return {
-        {"title", m_title},
-        {"template", m_template}
+        { "title", m_title },
+        { "template", m_template }
     };
 }

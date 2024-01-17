@@ -1,4 +1,5 @@
 #include "SessionWrapper.h"
+
 #include "RequestWrapper.h"
 #include "corvusoft/restbed/session.hpp"
 

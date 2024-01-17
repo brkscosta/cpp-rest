@@ -1,6 +1,8 @@
 #include "PromptService.h"
+
 #include "IPromptDAO.h"
 #include "Prompt.h"
+
 #include <algorithm>
 #include <iostream>
 #include <memory>
@@ -54,8 +56,10 @@ std::string PromptService::getAllPrompts()
 
     std::for_each(prompts.begin(), prompts.end(), [&jsonResult](const std::shared_ptr<model::Prompt>& prompt)
     {
-        if (prompt) {
-            auto promptDto = std::make_shared<model::CreatePromptDto>(prompt->getTitle(), prompt->getTemplate());
+        if (prompt)
+        {
+            auto promptDto = std::make_shared<model::CreatePromptDto>(prompt->getTitle(),
+                                                                    prompt->getTemplate());
             nlohmann::json promptJson = promptDto->toJson();
             jsonResult.push_back(promptJson);
         }
